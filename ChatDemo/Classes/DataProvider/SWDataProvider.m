@@ -12,11 +12,11 @@
 @implementation SWDataProvider
 
 + (NSDictionary *)myInfo{
-    return [NSDictionary dictionaryWithObjectsAndKeys:@"demo0",@"username", nil];
+    return [[NSUserDefaults standardUserDefaults] objectForKey:@"UserInfo"];
 }
 
-+ (NSString *)myUID{
-    return @"demo0";
++ (NSString *)myUsername{
+    return [[SWDataProvider myInfo] objectForKey:@"username"];
 }
 
 + (NSDictionary *)getMyProfile{
@@ -24,6 +24,27 @@
 }
 
 #pragma mark - Core Data
++ (SWUserCDSO *)userofUsername:(NSString *)username{
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *userEntity = [NSEntityDescription entityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username==%@",username];
+//    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"uid" ascending:YES];
+    
+    [fetchRequest setEntity:userEntity];
+    [fetchRequest setPredicate:predicate];
+//    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
+    [fetchRequest setFetchLimit:1];
+    
+    NSArray *ary = [[SWDataProvider managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+    
+    if (0==ary.count){
+        return nil;
+    }else{
+        return [ary objectAtIndex:0];
+    }
+}
+
 + (NSManagedObjectContext *)managedObjectContext{
     CDAppDelegate *appdelegate = (CDAppDelegate *)[UIApplication sharedApplication].delegate;
     

@@ -8,6 +8,7 @@
 
 #import "CDAppDelegate.h"
 #import "SWDataProvider.h"
+#import "SWMessagesViewController.h"
 
 @implementation CDAppDelegate
 @synthesize window;
@@ -17,13 +18,26 @@
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
-    CDViewController *vc = [[CDViewController alloc] init];
-    window.rootViewController = vc;
+    SWMessagesViewController *vcMessages = [[SWMessagesViewController alloc] init];
+    
+    UINavigationController *nav = [[UINavigationController alloc] initWithRootViewController:vcMessages];
+    
+    window.rootViewController = nav;
     [window makeKeyAndVisible];
     
-    [XMPPWorker checkAndConnect];
-    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(reloadAccount) name:@"ReloadAccount" object:nil];
+        
     return YES;
+}
+
+- (void)reloadAccount{
+    managedObjectContext = nil;
+    managedObjectModel = nil;
+    persistentStoreCoordinator = nil;
+    
+    SWMessagesViewController *vcMessages = [[SWMessagesViewController alloc] init];
+    UINavigationController *nav = (UINavigationController *)self.window.rootViewController;
+    nav.viewControllers = @[vcMessages];
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -78,8 +92,8 @@
 	if (persistentStoreCoordinator != nil) {
         return persistentStoreCoordinator;
     }
-	NSString *uid = [[SWDataProvider myInfo] objectForKey:@"uid"];
-	NSString *storeName = [NSString stringWithFormat:@"SWXMPP%d.sqlite",[uid intValue]];
+	NSString *username = [[SWDataProvider myInfo] objectForKey:@"username"];
+	NSString *storeName = [NSString stringWithFormat:@"SWXMPP%@.sqlite",username];
 	NSString *storePath = [storeName temporaryPath];
     
     

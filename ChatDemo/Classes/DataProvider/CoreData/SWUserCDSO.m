@@ -54,8 +54,26 @@
 	return ary;
 }
 
+
 - (SWMessageCDSO *)lastMessage{
-    return nil;//[SWDataProvider messageWithDate:[self lastcontact] ofUser:self];
+    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+    
+    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message" inManagedObjectContext:[SWDataProvider managedObjectContext]];
+    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"(dateline==%@) AND (user=%@)",[self lastcontact],self];
+
+    [fetchRequest setEntity:entity];
+    [fetchRequest setPredicate:predicate];
+    [fetchRequest setFetchLimit:1];
+//    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
+    
+    NSArray *ary = [[SWDataProvider managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+    
+    if (0==ary.count){
+        return nil;
+    }else{
+        return [ary objectAtIndex:0];
+        
+    }
 }
 
 - (int)unread{
@@ -75,7 +93,7 @@
 }
 
 + (SWUserCDSO *)userWithProfile:(NSDictionary *)info{
-    SWUserCDSO *user = [SWDataProvider userofUID:[[info objectForKey:@"uid"] intValue]];
+    SWUserCDSO *user = [SWDataProvider userofUsername:[info objectForKey:@"uid"]];
     
     if (!user)
         user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];

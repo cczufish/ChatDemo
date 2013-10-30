@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F6C20D1018215E5100DDD300 /* SWConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C20D0D18215E5100DDD300 /* SWConversationCell.m */; };
+		F6C20D1118215E5100DDD300 /* SWConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C20D0F18215E5100DDD300 /* SWConversationViewController.m */; };
+		F6C20D1718215F4500DDD300 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C20D1418215F4500DDD300 /* HPGrowingTextView.m */; };
+		F6C20D1818215F4500DDD300 /* HPTextViewInternal.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C20D1618215F4500DDD300 /* HPTextViewInternal.m */; };
+		F6C20D1D1821631900DDD300 /* ABPMEmoticons.png in Resources */ = {isa = PBXBuildFile; fileRef = F6C20D1B1821631900DDD300 /* ABPMEmoticons.png */; };
+		F6C20D1E1821631900DDD300 /* ABPMEmoticons@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6C20D1C1821631900DDD300 /* ABPMEmoticons@2x.png */; };
 		F6D430621820F95B00A04DC5 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D430611820F95B00A04DC5 /* Foundation.framework */; };
 		F6D430641820F95B00A04DC5 /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D430631820F95B00A04DC5 /* CoreGraphics.framework */; };
 		F6D430661820F95B00A04DC5 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D430651820F95B00A04DC5 /* UIKit.framework */; };
@@ -137,9 +143,6 @@
 		F6D433BB1820FACE00A04DC5 /* libz.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D433BA1820FACE00A04DC5 /* libz.dylib */; };
 		F6D433BD1820FAD500A04DC5 /* libiconv.2.4.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D433BC1820FAD500A04DC5 /* libiconv.2.4.0.dylib */; };
 		F6D433BF1820FB5F00A04DC5 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D433BE1820FB5F00A04DC5 /* libxml2.dylib */; };
-		F6D433D31820FBC000A04DC5 /* ABWebAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D433C41820FBC000A04DC5 /* ABWebAgent.m */; };
-		F6D433D41820FBC000A04DC5 /* aiba.sqlite in Resources */ = {isa = PBXBuildFile; fileRef = F6D433C51820FBC000A04DC5 /* aiba.sqlite */; };
-		F6D433D51820FBC000A04DC5 /* apiList.plist in Resources */ = {isa = PBXBuildFile; fileRef = F6D433C61820FBC000A04DC5 /* apiList.plist */; };
 		F6D433D61820FBC000A04DC5 /* SWMessageCDSO.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D433C91820FBC000A04DC5 /* SWMessageCDSO.m */; };
 		F6D433D81820FBC000A04DC5 /* SWUserCDSO.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D433CD1820FBC000A04DC5 /* SWUserCDSO.m */; };
 		F6D433D91820FBC000A04DC5 /* SWXMPP.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F6D433CE1820FBC000A04DC5 /* SWXMPP.xcdatamodel */; };
@@ -159,7 +162,7 @@
 		F6D433FF18211BBB00A04DC5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D433FC18211BBB00A04DC5 /* Default-568h@2x.png */; };
 		F6D4340018211BBB00A04DC5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D433FD18211BBB00A04DC5 /* Default.png */; };
 		F6D4340118211BBB00A04DC5 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D433FE18211BBB00A04DC5 /* Default@2x.png */; };
-		F6D4340418211BF100A04DC5 /* CDMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D4340318211BF100A04DC5 /* CDMessagesViewController.m */; };
+		F6D4340418211BF100A04DC5 /* SWMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D4340318211BF100A04DC5 /* SWMessagesViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -173,6 +176,16 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F6C20D0C18215E5100DDD300 /* SWConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWConversationCell.h; sourceTree = "<group>"; };
+		F6C20D0D18215E5100DDD300 /* SWConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWConversationCell.m; sourceTree = "<group>"; };
+		F6C20D0E18215E5100DDD300 /* SWConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWConversationViewController.h; sourceTree = "<group>"; };
+		F6C20D0F18215E5100DDD300 /* SWConversationViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWConversationViewController.m; sourceTree = "<group>"; };
+		F6C20D1318215F4500DDD300 /* HPGrowingTextView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPGrowingTextView.h; sourceTree = "<group>"; };
+		F6C20D1418215F4500DDD300 /* HPGrowingTextView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPGrowingTextView.m; sourceTree = "<group>"; };
+		F6C20D1518215F4500DDD300 /* HPTextViewInternal.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = HPTextViewInternal.h; sourceTree = "<group>"; };
+		F6C20D1618215F4500DDD300 /* HPTextViewInternal.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = HPTextViewInternal.m; sourceTree = "<group>"; };
+		F6C20D1B1821631900DDD300 /* ABPMEmoticons.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = ABPMEmoticons.png; sourceTree = "<group>"; };
+		F6C20D1C1821631900DDD300 /* ABPMEmoticons@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "ABPMEmoticons@2x.png"; sourceTree = "<group>"; };
 		F6D4305E1820F95B00A04DC5 /* ChatDemo.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChatDemo.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F6D430611820F95B00A04DC5 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		F6D430631820F95B00A04DC5 /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -433,10 +446,6 @@
 		F6D433BA1820FACE00A04DC5 /* libz.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libz.dylib; path = usr/lib/libz.dylib; sourceTree = SDKROOT; };
 		F6D433BC1820FAD500A04DC5 /* libiconv.2.4.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libiconv.2.4.0.dylib; path = usr/lib/libiconv.2.4.0.dylib; sourceTree = SDKROOT; };
 		F6D433BE1820FB5F00A04DC5 /* libxml2.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libxml2.dylib; path = usr/lib/libxml2.dylib; sourceTree = SDKROOT; };
-		F6D433C31820FBC000A04DC5 /* ABWebAgent.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABWebAgent.h; sourceTree = "<group>"; };
-		F6D433C41820FBC000A04DC5 /* ABWebAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABWebAgent.m; sourceTree = "<group>"; };
-		F6D433C51820FBC000A04DC5 /* aiba.sqlite */ = {isa = PBXFileReference; lastKnownFileType = file; path = aiba.sqlite; sourceTree = "<group>"; };
-		F6D433C61820FBC000A04DC5 /* apiList.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = apiList.plist; sourceTree = "<group>"; };
 		F6D433C81820FBC000A04DC5 /* SWMessageCDSO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMessageCDSO.h; sourceTree = "<group>"; };
 		F6D433C91820FBC000A04DC5 /* SWMessageCDSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMessageCDSO.m; sourceTree = "<group>"; };
 		F6D433CC1820FBC000A04DC5 /* SWUserCDSO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWUserCDSO.h; sourceTree = "<group>"; };
@@ -465,8 +474,8 @@
 		F6D433FC18211BBB00A04DC5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
 		F6D433FD18211BBB00A04DC5 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
 		F6D433FE18211BBB00A04DC5 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
-		F6D4340218211BF100A04DC5 /* CDMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDMessagesViewController.h; sourceTree = "<group>"; };
-		F6D4340318211BF100A04DC5 /* CDMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDMessagesViewController.m; sourceTree = "<group>"; };
+		F6D4340218211BF100A04DC5 /* SWMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMessagesViewController.h; sourceTree = "<group>"; };
+		F6D4340318211BF100A04DC5 /* SWMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMessagesViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -503,6 +512,34 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F6C20D1218215F4500DDD300 /* GrowingText */ = {
+			isa = PBXGroup;
+			children = (
+				F6C20D1318215F4500DDD300 /* HPGrowingTextView.h */,
+				F6C20D1418215F4500DDD300 /* HPGrowingTextView.m */,
+				F6C20D1518215F4500DDD300 /* HPTextViewInternal.h */,
+				F6C20D1618215F4500DDD300 /* HPTextViewInternal.m */,
+			);
+			path = GrowingText;
+			sourceTree = "<group>";
+		};
+		F6C20D191821631900DDD300 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				F6C20D1A1821631900DDD300 /* images */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		F6C20D1A1821631900DDD300 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				F6C20D1B1821631900DDD300 /* ABPMEmoticons.png */,
+				F6C20D1C1821631900DDD300 /* ABPMEmoticons@2x.png */,
+			);
+			path = images;
+			sourceTree = "<group>";
+		};
 		F6D430551820F95B00A04DC5 = {
 			isa = PBXGroup;
 			children = (
@@ -551,9 +588,14 @@
 				F6D430711820F95B00A04DC5 /* CDAppDelegate.m */,
 				F6D430761820F95B00A04DC5 /* CDViewController.h */,
 				F6D430771820F95B00A04DC5 /* CDViewController.m */,
+				F6C20D0C18215E5100DDD300 /* SWConversationCell.h */,
+				F6C20D0D18215E5100DDD300 /* SWConversationCell.m */,
+				F6C20D0E18215E5100DDD300 /* SWConversationViewController.h */,
+				F6C20D0F18215E5100DDD300 /* SWConversationViewController.m */,
+				F6D4340218211BF100A04DC5 /* SWMessagesViewController.h */,
+				F6D4340318211BF100A04DC5 /* SWMessagesViewController.m */,
 				F6D430681820F95B00A04DC5 /* Supporting Files */,
-				F6D4340218211BF100A04DC5 /* CDMessagesViewController.h */,
-				F6D4340318211BF100A04DC5 /* CDMessagesViewController.m */,
+				F6C20D191821631900DDD300 /* Resources */,
 			);
 			path = ChatDemo;
 			sourceTree = "<group>";
@@ -602,6 +644,7 @@
 		F6D430971820FA9A00A04DC5 /* Utils */ = {
 			isa = PBXGroup;
 			children = (
+				F6C20D1218215F4500DDD300 /* GrowingText */,
 				F6D433ED1821067400A04DC5 /* CKRefreshControl */,
 				F6D433E41820FD9900A04DC5 /* MTStatusBarOverlay */,
 				F6D433DE1820FD4D00A04DC5 /* SVProgressHUD */,
@@ -1262,10 +1305,6 @@
 				F6D433CF1820FBC000A04DC5 /* JsonParser */,
 				F6D433EA1820FF1A00A04DC5 /* SWDataProvider.h */,
 				F6D433EB1820FF1A00A04DC5 /* SWDataProvider.m */,
-				F6D433C31820FBC000A04DC5 /* ABWebAgent.h */,
-				F6D433C41820FBC000A04DC5 /* ABWebAgent.m */,
-				F6D433C51820FBC000A04DC5 /* aiba.sqlite */,
-				F6D433C61820FBC000A04DC5 /* apiList.plist */,
 			);
 			path = DataProvider;
 			sourceTree = "<group>";
@@ -1400,12 +1439,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F6D433D41820FBC000A04DC5 /* aiba.sqlite in Resources */,
+				F6C20D1D1821631900DDD300 /* ABPMEmoticons.png in Resources */,
 				F6D433E21820FD4D00A04DC5 /* SVProgressHUD.bundle in Resources */,
-				F6D433D51820FBC000A04DC5 /* apiList.plist in Resources */,
 				F6D4340118211BBB00A04DC5 /* Default@2x.png in Resources */,
 				F6D4340018211BBB00A04DC5 /* Default.png in Resources */,
 				F6D432D81820FA9C00A04DC5 /* SWToolKit.bundle in Resources */,
+				F6C20D1E1821631900DDD300 /* ABPMEmoticons@2x.png in Resources */,
 				F6D4333F1820FA9C00A04DC5 /* README.txt in Resources */,
 				F6D433FF18211BBB00A04DC5 /* Default-568h@2x.png in Resources */,
 				F6D4306C1820F95B00A04DC5 /* InfoPlist.strings in Resources */,
@@ -1446,18 +1485,20 @@
 				F6D432F31820FA9C00A04DC5 /* XMPPRosterCoreDataStorage.m in Sources */,
 				F6D432F41820FA9C00A04DC5 /* XMPPUserCoreDataStorageObject.m in Sources */,
 				F6D433081820FA9C00A04DC5 /* XMPPMessage+XEP0045.m in Sources */,
-				F6D4340418211BF100A04DC5 /* CDMessagesViewController.m in Sources */,
+				F6D4340418211BF100A04DC5 /* SWMessagesViewController.m in Sources */,
 				F6D433F61821067400A04DC5 /* CKRefreshControl.m in Sources */,
 				F6D432EE1820FA9C00A04DC5 /* XMPPProcessOne.m in Sources */,
 				F6D432ED1820FA9C00A04DC5 /* XMPPCoreDataStorage.m in Sources */,
 				F6D433181820FA9C00A04DC5 /* XMPPPubSub.m in Sources */,
 				F6D433F51821067400A04DC5 /* CKRefreshArrowView.m in Sources */,
 				F6D433401820FA9C00A04DC5 /* NSString+DDXML.m in Sources */,
+				F6C20D1818215F4500DDD300 /* HPTextViewInternal.m in Sources */,
 				F6D433301820FA9C00A04DC5 /* XMPPMessage+XEP_0224.m in Sources */,
 				F6D4332B1820FA9C00A04DC5 /* XMPPPing.m in Sources */,
 				F6D433241820FA9C00A04DC5 /* XMPPMessageArchiving_Contact_CoreDataObject.m in Sources */,
 				F6D433D91820FBC000A04DC5 /* SWXMPP.xcdatamodel in Sources */,
 				F6D432FD1820FA9C00A04DC5 /* XMPPRoom.xcdatamodeld in Sources */,
+				F6C20D1718215F4500DDD300 /* HPGrowingTextView.m in Sources */,
 				F6D433E31820FD4D00A04DC5 /* SVProgressHUD.m in Sources */,
 				F6D4330A1820FA9C00A04DC5 /* XMPPRoom.m in Sources */,
 				F6D433331820FA9C00A04DC5 /* LibIDN.m in Sources */,
@@ -1470,7 +1511,6 @@
 				F6D433DA1820FBC000A04DC5 /* ABParamInfo.m in Sources */,
 				F6D433281820FA9C00A04DC5 /* XMPPvCardAvatarModule.m in Sources */,
 				F6D433111820FA9C00A04DC5 /* XMPPvCardTempAdr.m in Sources */,
-				F6D433D31820FBC000A04DC5 /* ABWebAgent.m in Sources */,
 				F6D4306E1820F95B00A04DC5 /* main.m in Sources */,
 				F6D4333B1820FA9C00A04DC5 /* DDLog.m in Sources */,
 				F6D433211820FA9C00A04DC5 /* XMPPCapsResourceCoreDataStorageObject.m in Sources */,
@@ -1496,6 +1536,7 @@
 				F6D4331A1820FA9C00A04DC5 /* NSDate+XMPPDateTimeProfiles.m in Sources */,
 				F6D432EC1820FA9C00A04DC5 /* XMPPBandwidthMonitor.m in Sources */,
 				F6D433031820FA9C00A04DC5 /* XMPPRoomMessageHybridCoreDataStorageObject.m in Sources */,
+				F6C20D1018215E5100DDD300 /* SWConversationCell.m in Sources */,
 				F6D432E01820FA9C00A04DC5 /* XMPPXFacebookPlatformAuthentication.m in Sources */,
 				F6D433D61820FBC000A04DC5 /* SWMessageCDSO.m in Sources */,
 				F6D4330C1820FA9C00A04DC5 /* XMPPvCardAvatarCoreDataStorageObject.m in Sources */,
@@ -1542,6 +1583,7 @@
 				F6D433021820FA9C00A04DC5 /* XMPPRoomHybridStorage.m in Sources */,
 				F6D4333A1820FA9C00A04DC5 /* DDFileLogger.m in Sources */,
 				F6D433291820FA9C00A04DC5 /* XMPPMessage+XEP_0184.m in Sources */,
+				F6C20D1118215E5100DDD300 /* SWConversationViewController.m in Sources */,
 				F6D432E41820FA9C00A04DC5 /* XMPPElement.m in Sources */,
 				F6D433D81820FBC000A04DC5 /* SWUserCDSO.m in Sources */,
 				F6D430781820F95B00A04DC5 /* CDViewController.m in Sources */,
@@ -1679,6 +1721,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 				);
 				INFOPLIST_FILE = "ChatDemo/ChatDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/Stan/Desktop/ChatDemo/ChatDemo/Classes/Utils/XMPP/Vendor/libidn,
@@ -1708,6 +1751,7 @@
 					"$(SDKROOT)/usr/include/libxml2",
 				);
 				INFOPLIST_FILE = "ChatDemo/ChatDemo-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 6.0;
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
 					/Users/Stan/Desktop/ChatDemo/ChatDemo/Classes/Utils/XMPP/Vendor/libidn,
@@ -1785,6 +1829,7 @@
 				F6D430921820F95B00A04DC5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		F6D430931820F95B00A04DC5 /* Build configuration list for PBXNativeTarget "ChatDemoTests" */ = {
 			isa = XCConfigurationList;
@@ -1793,6 +1838,7 @@
 				F6D430951820F95B00A04DC5 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 

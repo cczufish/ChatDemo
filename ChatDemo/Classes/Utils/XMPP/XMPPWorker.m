@@ -83,15 +83,15 @@ static XMPPAutoPing *xmppAutoPing;
     [xmppStream sendElement:message];
 }
 
-+ (void)sendFakeMessage:(NSString *)msg fromUser:(NSString *)uid{
-    if (![uid isEqualToString:[SWDataProvider myUID]]){
++ (void)sendFakeMessage:(NSString *)msg fromUser:(NSString *)username{
+    if (![username isEqualToString:[SWDataProvider myUsername]]){
         NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
         
         NSXMLElement *body = [NSXMLElement elementWithName:@"body" stringValue:msg];
         [message addChild:body];
         
         [message addAttributeWithName:@"type" stringValue:@"chat"];
-        [message addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",uid,kChatServerDomain]];
+        [message addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",username,kChatServerDomain]];
         
         [[XMPPWorker sharedWorker] xmppStream:nil didReceiveMessage:(XMPPMessage *)message];
     }
@@ -175,7 +175,7 @@ static XMPPAutoPing *xmppAutoPing;
     if (![xmppStream isDisconnected])
         return YES;
     
-    xmppStream.myJID = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@/iphone",[[SWDataProvider myInfo] objectForKey:@"username"],kChatServerDomain]];
+    xmppStream.myJID = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@/iphone",[SWDataProvider myUsername],kChatServerDomain]];
     xmppStream.hostName = kChatServer;
     
     NSError *error = nil;
@@ -213,7 +213,7 @@ static XMPPAutoPing *xmppAutoPing;
     [xmppPrivacy blockUser:uid];
     
     sw_dispatch_sync_on_main_thread(^{
-        SWUserCDSO *user = [SWDataProvider userofUID:[uid intValue]];
+        SWUserCDSO *user = [SWDataProvider userofUsername:uid];
         if (user){
             [[SWDataProvider managedObjectContext] deleteObject:user];
             [[SWDataProvider managedObjectContext] save:nil];
@@ -240,10 +240,11 @@ static XMPPAutoPing *xmppAutoPing;
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender{
     NSLog(@"Loginned");
     [self goOnline];
-    [XMPPWorker initialMessageCenter];
+    [[MTStatusBarOverlay sharedInstance] postFinishMessage:@"登录成功" duration:1];
 }
 
 - (void)xmppStream:(XMPPStream *)sender didNotAuthenticate:(DDXMLElement *)error{
+    [[MTStatusBarOverlay sharedInstance] postErrorMessage:@"用户名或密码错误" duration:1];
     NSLog(@"Login Error:%@",error);
 }
 
@@ -280,7 +281,12 @@ static XMPPAutoPing *xmppAutoPing;
         NSString *content = [[message elementForName:@"body"] stringValue];
         
         sw_dispatch_sync_on_main_thread(^{
-            SWUserCDSO *user = [SWDataProvider userofUID:[uid intValue]];
+            SWUserCDSO *user = [SWDataProvider userofUsername:uid];
+            if (!user){
+                user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
+                user.username = uid;
+                [[SWDataProvider managedObjectContext] save:nil];
+            }
             if (user){
                 if (!chatUID || ![chatUID isEqualToString:uid])
                     user.newnum = [NSNumber numberWithInt:user.newnum.intValue+1];
@@ -303,7 +309,7 @@ static XMPPAutoPing *xmppAutoPing;
                 if ([body attributeStringValueForName:@"uid"]){
                     NSString *relativeUID = [body attributeStringValueForName:@"uid"];
                     NSString *relativeNickname = [body attributeStringValueForName:@"nickname"];
-                    SWUserCDSO *relative = [SWDataProvider userofUID:[relativeUID intValue]];
+                    SWUserCDSO *relative = [SWDataProvider userofUsername:relativeUID];
                     if (!relative){
                         relative = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
                         relative.uid = [NSNumber numberWithInt:[relativeUID intValue]];
@@ -383,7 +389,7 @@ static XMPPAutoPing *xmppAutoPing;
                 if ([body attributeStringValueForName:@"uid"]){
                     NSString *relativeUID = [body attributeStringValueForName:@"uid"];
                     NSString *relativeNickname = [body attributeStringValueForName:@"nickname"];
-                    SWUserCDSO *relative = [SWDataProvider userofUID:[relativeUID intValue]];
+                    SWUserCDSO *relative = [SWDataProvider userofUsername:relativeUID];
                     if (!relative){
                         relative = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
                         relative.uid = [NSNumber numberWithInt:[relativeUID intValue]];
@@ -404,7 +410,7 @@ static XMPPAutoPing *xmppAutoPing;
 + (void)initialMessageCenter{
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"uid!=%@ && uid>0 && lastcontact>%@",[SWDataProvider myUID],[NSDate dateWithTimeIntervalSince1970:0]]];
+    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"username!=%@ && lastcontact>%@",[SWDataProvider myUsername],[NSDate dateWithTimeIntervalSince1970:0]]];
     [fetchRequest setIncludesPropertyValues:NO]; //only fetch the managedObjectID
     
     NSArray *users = [[SWDataProvider managedObjectContext] executeFetchRequest:fetchRequest error:nil];

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9409BD0E-BF9D-406A-9147-2A9CB8008C51</string>
+	<key>IDESourceControlProjectName</key>
+	<string>ChatDemo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>A8099166-B567-4904-9B76-F38A0B2ABC4D</key>
+		<string>ssh://www.marsmobile.com/ChatDemo.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>ChatDemo.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>A8099166-B567-4904-9B76-F38A0B2ABC4D</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://www.marsmobile.com/ChatDemo.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>A8099166-B567-4904-9B76-F38A0B2ABC4D</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>A8099166-B567-4904-9B76-F38A0B2ABC4D</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ChatDemo</string>
+		</dict>
+	</array>
+</dict>
+</plist>

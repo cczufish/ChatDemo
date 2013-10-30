@@ -14,11 +14,11 @@
 @interface SWDataProvider : NSObject
 
 + (NSDictionary *)myInfo;
-+ (NSString *)myUID;
++ (NSString *)myUsername;
 + (NSDictionary *)getMyProfile;
 
 #pragma mark - Core Data
-+ (SWUserCDSO *)userofUID:(int)uid;
++ (SWUserCDSO *)userofUsername:(NSString *)username;
 + (NSManagedObjectContext *)managedObjectContext;
 
 @end

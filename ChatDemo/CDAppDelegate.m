@@ -7,12 +7,16 @@
 //
 
 #import "CDAppDelegate.h"
+#import "SWDataProvider.h"
 
 @implementation CDAppDelegate
+@synthesize window;
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
+    
     return YES;
 }
 							
@@ -41,6 +45,89 @@
 - (void)applicationWillTerminate:(UIApplication *)application
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
+}
+
+#pragma mark Core Data stack
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+/**
+ * Returns the managed object model for the application.
+ * If the model doesn't already exist, it is created by merging all of the models found in the application bundle.
+ **/
+- (NSManagedObjectModel *)managedObjectModel
+{
+	if (managedObjectModel != nil) {
+        return managedObjectModel;
+    }
+    managedObjectModel = [NSManagedObjectModel mergedModelFromBundles:nil];
+    return managedObjectModel;
+}
+
+/**
+ * Returns the persistent store coordinator for the application.
+ * If the coordinator doesn't already exist, it is created and the application's store added to it.
+ **/
+- (NSPersistentStoreCoordinator *)persistentStoreCoordinator
+{
+	if (persistentStoreCoordinator != nil) {
+        return persistentStoreCoordinator;
+    }
+	NSString *uid = [[SWDataProvider myInfo] objectForKey:@"uid"];
+	NSString *storeName = [NSString stringWithFormat:@"SWXMPP%d.sqlite",[uid intValue]];
+	NSString *storePath = [storeName temporaryPath];
+    
+    
+    
+    NSURL *storeUrl = [NSURL fileURLWithPath:storePath];
+    
+    NSDictionary *sourceMetaData = [NSPersistentStoreCoordinator metadataForPersistentStoreOfType:NSSQLiteStoreType
+                                                                                              URL:storeUrl
+                                                                                            error:nil];
+    NSManagedObjectModel *destinationModel = [self managedObjectModel];
+    BOOL isCompatibile = [destinationModel isConfiguration:nil compatibleWithStoreMetadata:sourceMetaData];
+    if (!isCompatibile){
+        if ([[NSFileManager defaultManager] fileExistsAtPath:storePath])
+            [[NSFileManager defaultManager] removeItemAtPath:storePath error:nil];
+    }
+    
+	NSManagedObjectModel *mom = [self managedObjectModel];
+	
+	NSError *error = nil;
+    persistentStoreCoordinator = [[NSPersistentStoreCoordinator alloc] initWithManagedObjectModel:mom];
+	
+	NSPersistentStore *persistentStore = [persistentStoreCoordinator addPersistentStoreWithType:NSSQLiteStoreType
+	                                                                              configuration:nil
+	                                                                                        URL:storeUrl
+	                                                                                    options:nil
+	                                                                                      error:&error];
+    if (persistentStore == nil)
+	{
+		NSLog(@"Unresolved error %@, %@", error, [error userInfo]);
+		abort();
+    }
+	
+    return persistentStoreCoordinator;
+}
+
+/**
+ * Returns the managed object context for the application.
+ * If the context doesn't already exist, it is created and
+ * bound to the persistent store coordinator for the application.
+ **/
+- (NSManagedObjectContext *)managedObjectContext
+{
+	if (managedObjectContext != nil) {
+        return managedObjectContext;
+    }
+	
+    NSPersistentStoreCoordinator *coordinator = [self persistentStoreCoordinator];
+    if (coordinator != nil) {
+        managedObjectContext = [[NSManagedObjectContext alloc] init];
+        NSUndoManager *anUndoManager = [[NSUndoManager	alloc] init];
+    	[managedObjectContext setUndoManager:anUndoManager];
+        [managedObjectContext setPersistentStoreCoordinator: coordinator];
+    }
+    return managedObjectContext;
 }
 
 @end

@@ -7,9 +7,18 @@
 //
 
 #import <UIKit/UIKit.h>
-
-@interface CDAppDelegate : UIResponder <UIApplicationDelegate>
-
+#import "CDViewController.h"
+#import <CoreData/CoreData.h>
+@interface CDAppDelegate : UIResponder <UIApplicationDelegate>{
+    //  Core Data
+    NSManagedObjectModel *managedObjectModel;
+    NSManagedObjectContext *managedObjectContext;
+    NSPersistentStoreCoordinator *persistentStoreCoordinator;
+}
 @property (strong, nonatomic) UIWindow *window;
+//  Core Data
+@property (nonatomic, readonly) NSManagedObjectModel *managedObjectModel;
+@property (nonatomic, readonly) NSManagedObjectContext *managedObjectContext;
+@property (nonatomic, readonly) NSPersistentStoreCoordinator *persistentStoreCoordinator;
 
 @end

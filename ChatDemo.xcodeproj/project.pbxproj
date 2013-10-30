@@ -156,6 +156,10 @@
 		F6D433F818210A1F00A04DC5 /* libsqlite3.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D433F718210A1F00A04DC5 /* libsqlite3.dylib */; };
 		F6D433FA182113CF00A04DC5 /* libresolv.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D433F9182113CF00A04DC5 /* libresolv.dylib */; };
 		F6D433FB1821141100A04DC5 /* libidn.a in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D431B81820FA9B00A04DC5 /* libidn.a */; };
+		F6D433FF18211BBB00A04DC5 /* Default-568h@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D433FC18211BBB00A04DC5 /* Default-568h@2x.png */; };
+		F6D4340018211BBB00A04DC5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D433FD18211BBB00A04DC5 /* Default.png */; };
+		F6D4340118211BBB00A04DC5 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D433FE18211BBB00A04DC5 /* Default@2x.png */; };
+		F6D4340418211BF100A04DC5 /* CDMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D4340318211BF100A04DC5 /* CDMessagesViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -458,6 +462,11 @@
 		F6D433F31821067400A04DC5 /* CKRefreshControl.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CKRefreshControl.m; sourceTree = "<group>"; };
 		F6D433F718210A1F00A04DC5 /* libsqlite3.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.dylib; path = usr/lib/libsqlite3.dylib; sourceTree = SDKROOT; };
 		F6D433F9182113CF00A04DC5 /* libresolv.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libresolv.dylib; path = usr/lib/libresolv.dylib; sourceTree = SDKROOT; };
+		F6D433FC18211BBB00A04DC5 /* Default-568h@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default-568h@2x.png"; sourceTree = "<group>"; };
+		F6D433FD18211BBB00A04DC5 /* Default.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = Default.png; sourceTree = "<group>"; };
+		F6D433FE18211BBB00A04DC5 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
+		F6D4340218211BF100A04DC5 /* CDMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CDMessagesViewController.h; sourceTree = "<group>"; };
+		F6D4340318211BF100A04DC5 /* CDMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CDMessagesViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -543,6 +552,8 @@
 				F6D430761820F95B00A04DC5 /* CDViewController.h */,
 				F6D430771820F95B00A04DC5 /* CDViewController.m */,
 				F6D430681820F95B00A04DC5 /* Supporting Files */,
+				F6D4340218211BF100A04DC5 /* CDMessagesViewController.h */,
+				F6D4340318211BF100A04DC5 /* CDMessagesViewController.m */,
 			);
 			path = ChatDemo;
 			sourceTree = "<group>";
@@ -550,6 +561,9 @@
 		F6D430681820F95B00A04DC5 /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				F6D433FC18211BBB00A04DC5 /* Default-568h@2x.png */,
+				F6D433FD18211BBB00A04DC5 /* Default.png */,
+				F6D433FE18211BBB00A04DC5 /* Default@2x.png */,
 				F6D430691820F95B00A04DC5 /* ChatDemo-Info.plist */,
 				F6D4306A1820F95B00A04DC5 /* InfoPlist.strings */,
 				F6D4306D1820F95B00A04DC5 /* main.m */,
@@ -1389,8 +1403,11 @@
 				F6D433D41820FBC000A04DC5 /* aiba.sqlite in Resources */,
 				F6D433E21820FD4D00A04DC5 /* SVProgressHUD.bundle in Resources */,
 				F6D433D51820FBC000A04DC5 /* apiList.plist in Resources */,
+				F6D4340118211BBB00A04DC5 /* Default@2x.png in Resources */,
+				F6D4340018211BBB00A04DC5 /* Default.png in Resources */,
 				F6D432D81820FA9C00A04DC5 /* SWToolKit.bundle in Resources */,
 				F6D4333F1820FA9C00A04DC5 /* README.txt in Resources */,
+				F6D433FF18211BBB00A04DC5 /* Default-568h@2x.png in Resources */,
 				F6D4306C1820F95B00A04DC5 /* InfoPlist.strings in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1429,6 +1446,7 @@
 				F6D432F31820FA9C00A04DC5 /* XMPPRosterCoreDataStorage.m in Sources */,
 				F6D432F41820FA9C00A04DC5 /* XMPPUserCoreDataStorageObject.m in Sources */,
 				F6D433081820FA9C00A04DC5 /* XMPPMessage+XEP0045.m in Sources */,
+				F6D4340418211BF100A04DC5 /* CDMessagesViewController.m in Sources */,
 				F6D433F61821067400A04DC5 /* CKRefreshControl.m in Sources */,
 				F6D432EE1820FA9C00A04DC5 /* XMPPProcessOne.m in Sources */,
 				F6D432ED1820FA9C00A04DC5 /* XMPPCoreDataStorage.m in Sources */,

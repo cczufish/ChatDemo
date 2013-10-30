@@ -9,8 +9,8 @@
 #import <Foundation/Foundation.h>
 #import "XMPPFramework.h"
 
-#define kChatServer     @"chat.aiba.com"
-#define kChatServerDomain   @"chat.aiba.com"
+#define kChatServer     @"222.73.136.117"
+#define kChatServerDomain   @"xmppserver"
 
 @interface XMPPWorker:NSObject<XMPPStreamDelegate,XMPPReconnectDelegate,XMPPAutoPingDelegate>{
     

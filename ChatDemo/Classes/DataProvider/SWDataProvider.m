@@ -7,7 +7,27 @@
 //
 
 #import "SWDataProvider.h"
+#import "CDAppDelegate.h"
 
 @implementation SWDataProvider
+
++ (NSDictionary *)myInfo{
+    return [NSDictionary dictionaryWithObjectsAndKeys:@"demo0",@"username", nil];
+}
+
++ (NSString *)myUID{
+    return @"demo0";
+}
+
++ (NSDictionary *)getMyProfile{
+    return nil;
+}
+
+#pragma mark - Core Data
++ (NSManagedObjectContext *)managedObjectContext{
+    CDAppDelegate *appdelegate = (CDAppDelegate *)[UIApplication sharedApplication].delegate;
+    
+    return appdelegate.managedObjectContext;
+}
 
 @end

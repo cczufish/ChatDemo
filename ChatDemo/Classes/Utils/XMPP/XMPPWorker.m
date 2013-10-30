@@ -91,7 +91,7 @@ static XMPPAutoPing *xmppAutoPing;
         [message addChild:body];
         
         [message addAttributeWithName:@"type" stringValue:@"chat"];
-        [message addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@chat.aiba.com",uid]];
+        [message addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",uid,kChatServerDomain]];
         
         [[XMPPWorker sharedWorker] xmppStream:nil didReceiveMessage:(XMPPMessage *)message];
     }
@@ -134,10 +134,11 @@ static XMPPAutoPing *xmppAutoPing;
 }
 
 + (void)checkAndConnect{
-    if (![SWDataProvider myInfo])
-        return;
+//    if (![SWDataProvider myInfo])
+//        return;
     [[MTStatusBarOverlay sharedInstance] postMessage:@"正在连接..."];
-
+    [XMPPWorker connect];
+    return;
     sw_dispatch_async_on_background_thread(^{
         [XMPPWorker checkLoginStatus];
     });
@@ -174,7 +175,7 @@ static XMPPAutoPing *xmppAutoPing;
     if (![xmppStream isDisconnected])
         return YES;
     
-    xmppStream.myJID = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@/iphone",[[SWDataProvider myInfo] objectForKey:@"uid"],kChatServerDomain]];
+    xmppStream.myJID = [XMPPJID jidWithString:[NSString stringWithFormat:@"%@@%@/iphone",[[SWDataProvider myInfo] objectForKey:@"username"],kChatServerDomain]];
     xmppStream.hostName = kChatServer;
     
     NSError *error = nil;
@@ -233,7 +234,7 @@ static XMPPAutoPing *xmppAutoPing;
     NSLog(@"Connected");
     
     NSError *error = nil;
-    [xmppStream authenticateWithPassword:@"aibachat" error:&error];
+    [xmppStream authenticateWithPassword:@"chatdemo" error:&error];
 }
 
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender{
@@ -418,7 +419,7 @@ static XMPPAutoPing *xmppAutoPing;
             [message addChild:body];
             
             [message addAttributeWithName:@"type" stringValue:@"chat"];
-            [message addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@chat.aiba.com",[msg objectForKey:@"uid"]]];
+            [message addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",[msg objectForKey:@"uid"],kChatServerDomain]];
             
             [[XMPPWorker sharedWorker] xmppStream:nil didReceiveMessage:(XMPPMessage *)message];
         }

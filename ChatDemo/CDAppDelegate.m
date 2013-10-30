@@ -17,6 +17,12 @@
     // Override point for customization after application launch.
     self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
     
+    CDViewController *vc = [[CDViewController alloc] init];
+    window.rootViewController = vc;
+    [window makeKeyAndVisible];
+    
+    [XMPPWorker checkAndConnect];
+    
     return YES;
 }
 							

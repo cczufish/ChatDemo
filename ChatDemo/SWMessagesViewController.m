@@ -32,7 +32,7 @@
  
     
     if (![SWDataProvider myInfo]){
-        [self showAccountSelection];
+        [self performSelector:@selector(showAccountSelection) withObject:nil afterDelay:2];
     }else{
         self.navigationItem.title = [SWDataProvider myUsername];
         [XMPPWorker checkAndConnect];

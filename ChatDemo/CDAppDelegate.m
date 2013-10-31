@@ -34,7 +34,7 @@
     managedObjectContext = nil;
     managedObjectModel = nil;
     persistentStoreCoordinator = nil;
-    
+    [XMPPWorker disconnect];
     SWMessagesViewController *vcMessages = [[SWMessagesViewController alloc] init];
     UINavigationController *nav = (UINavigationController *)self.window.rootViewController;
     nav.viewControllers = @[vcMessages];

@@ -240,6 +240,7 @@ static XMPPAutoPing *xmppAutoPing;
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender{
     NSLog(@"Loginned");
     [self goOnline];
+    [XMPPWorker initialMessageCenter];
     [[MTStatusBarOverlay sharedInstance] postFinishMessage:@"登录成功" duration:1];
 }
 
@@ -408,29 +409,10 @@ static XMPPAutoPing *xmppAutoPing;
 
 #pragma mark - Other Actions
 + (void)initialMessageCenter{
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"username!=%@ && lastcontact>%@",[SWDataProvider myUsername],[NSDate dateWithTimeIntervalSince1970:0]]];
-    [fetchRequest setIncludesPropertyValues:NO]; //only fetch the managedObjectID
-    
-    NSArray *users = [[SWDataProvider managedObjectContext] executeFetchRequest:fetchRequest error:nil];
-    BOOL bMessagesInserted = [[NSUserDefaults standardUserDefaults] boolForKey:@"MessagesInserted"];
-    if (0==users.count && !bMessagesInserted){
-        NSArray *messages = [NSArray arrayWithContentsOfFile:[@"messages.plist" bundlePath]];
-        
-        for (NSDictionary *msg in messages){
-            NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
-            
-            NSXMLElement *body = [NSXMLElement elementWithName:@"body" stringValue:[msg objectForKey:@"content"]];
-            [message addChild:body];
-            
-            [message addAttributeWithName:@"type" stringValue:@"chat"];
-            [message addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",[msg objectForKey:@"uid"],kChatServerDomain]];
-            
-            [[XMPPWorker sharedWorker] xmppStream:nil didReceiveMessage:(XMPPMessage *)message];
-        }
-        
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"MessagesInserted"];
+    for (int i=0;i<3;i++){
+        NSString *username = [NSString stringWithFormat:@"demo%d",i];
+        if (![username isEqualToString:[SWDataProvider myUsername]])
+            [XMPPWorker sendFakeMessage:@"test" fromUser:username];
     }
 }
 

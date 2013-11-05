@@ -163,6 +163,7 @@
 		F6D4340018211BBB00A04DC5 /* Default.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D433FD18211BBB00A04DC5 /* Default.png */; };
 		F6D4340118211BBB00A04DC5 /* Default@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = F6D433FE18211BBB00A04DC5 /* Default@2x.png */; };
 		F6D4340418211BF100A04DC5 /* SWMessagesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D4340318211BF100A04DC5 /* SWMessagesViewController.m */; };
+		F6EB44231828CECE0077B2BE /* SWGroupCDSO.m in Sources */ = {isa = PBXBuildFile; fileRef = F6EB44221828CECE0077B2BE /* SWGroupCDSO.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -476,6 +477,8 @@
 		F6D433FE18211BBB00A04DC5 /* Default@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "Default@2x.png"; sourceTree = "<group>"; };
 		F6D4340218211BF100A04DC5 /* SWMessagesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWMessagesViewController.h; sourceTree = "<group>"; };
 		F6D4340318211BF100A04DC5 /* SWMessagesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMessagesViewController.m; sourceTree = "<group>"; };
+		F6EB44211828CECE0077B2BE /* SWGroupCDSO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWGroupCDSO.h; sourceTree = "<group>"; };
+		F6EB44221828CECE0077B2BE /* SWGroupCDSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWGroupCDSO.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1312,11 +1315,13 @@
 		F6D433C71820FBC000A04DC5 /* CoreData */ = {
 			isa = PBXGroup;
 			children = (
+				F6D433CE1820FBC000A04DC5 /* SWXMPP.xcdatamodel */,
 				F6D433C81820FBC000A04DC5 /* SWMessageCDSO.h */,
 				F6D433C91820FBC000A04DC5 /* SWMessageCDSO.m */,
 				F6D433CC1820FBC000A04DC5 /* SWUserCDSO.h */,
 				F6D433CD1820FBC000A04DC5 /* SWUserCDSO.m */,
-				F6D433CE1820FBC000A04DC5 /* SWXMPP.xcdatamodel */,
+				F6EB44211828CECE0077B2BE /* SWGroupCDSO.h */,
+				F6EB44221828CECE0077B2BE /* SWGroupCDSO.m */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -1592,6 +1597,7 @@
 				F6D433161820FA9C00A04DC5 /* XMPPvCardTempModule.m in Sources */,
 				F6D432DC1820FA9C00A04DC5 /* XMPPDeprecatedDigestAuthentication.m in Sources */,
 				F6D4332D1820FA9C00A04DC5 /* XMPPTime.m in Sources */,
+				F6EB44231828CECE0077B2BE /* SWGroupCDSO.m in Sources */,
 				F6D433131820FA9C00A04DC5 /* XMPPvCardTempBase.m in Sources */,
 				F6D432EA1820FA9C00A04DC5 /* XMPPPresence.m in Sources */,
 				F6D4333D1820FA9C00A04DC5 /* ContextFilterLogFormatter.m in Sources */,

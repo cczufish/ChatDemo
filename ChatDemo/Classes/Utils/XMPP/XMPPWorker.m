@@ -497,17 +497,14 @@ static XMPPAutoPing *xmppAutoPing;
 
 #pragma mark - Other Actions
 + (void)initialMessageCenter{
-    
-    
-    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-    [fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]]];
-    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"username!=%@ && lastcontact>%@",[SWDataProvider myUsername],[NSDate dateWithTimeIntervalSince1970:0]]];
+    [fetchRequest setEntity:[NSEntityDescription entityForName:@"Conversation" inManagedObjectContext:[SWDataProvider managedObjectContext]]];
+//    [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"username!=%@ && lastcontact>%@",[SWDataProvider myUsername],[NSDate dateWithTimeIntervalSince1970:0]]];
     [fetchRequest setIncludesPropertyValues:NO]; //only fetch the managedObjectID
     
-    NSArray *users = [[SWDataProvider managedObjectContext] executeFetchRequest:fetchRequest error:nil];
+    NSArray *conversations = [[SWDataProvider managedObjectContext] executeFetchRequest:fetchRequest error:nil];
 //    BOOL bMessagesInserted = [[NSUserDefaults standardUserDefaults] boolForKey:@"MessagesInserted"];
-    if (0==users.count){
+    if (0==conversations.count){
         for (int i=0;i<3;i++){
             NSString *username = [NSString stringWithFormat:@"demo%d",i];
             if (![username isEqualToString:[SWDataProvider myUsername]])

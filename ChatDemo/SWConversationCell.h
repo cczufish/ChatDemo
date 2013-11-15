@@ -18,7 +18,7 @@
     UIActivityIndicatorView *indicator;
     UIImageView *imgvBG,*imgvArrow,*imgvLevel;
     SWRichLabel *lblContent;
-    UILabel *lblTime;
+    UILabel *lblTime,*lblName;
     CAShapeLayer *slBG;
     
     SWMessageCDSO __weak *message;

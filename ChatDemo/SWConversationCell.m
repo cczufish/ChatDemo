@@ -40,6 +40,7 @@
     
     BOOL isSender = message.isOutbound;
     [imgvAvatar loadURL:isSender?[[[NSUserDefaults standardUserDefaults] objectForKey:@"UserInfo"] objectForKey:@"avatar"]:message.user.avatar];
+    lblName.text = message.user.username;
     
     NSString *content = message.content;
     lblContent.textColor = isSender?[UIColor whiteColor]:[UIColor blackColor];
@@ -140,6 +141,11 @@
         [vMessage addSubview:imgvAvatar];
         imgvAvatar.userInteractionEnabled = YES;
         
+        lblName = [UILabel createLabelWithFrame:imgvAvatar.bounds font:[UIFont systemFontOfSize:8]];
+        [imgvAvatar addSubview:lblName];
+        lblName.textAlignment = NSTextAlignmentCenter;
+        
+        
         imgvLevel = [[UIImageView alloc] initWithFrame:CGRectZero];
         imgvLevel.center = CGPointMake(imgvAvatar.frame.origin.x+imgvAvatar.frame.size.width, imgvAvatar.frame.origin.y+imgvAvatar.frame.size.height);
         [vMessage addSubview:imgvLevel];
@@ -182,7 +188,7 @@
         //  时间
         lblTime = [UILabel createLabelWithFrame:CGRectZero font:[UIFont systemFontOfSize:10] textColor:[UIColor colorWithWhite:.56 alpha:1]];
         lblTime.backgroundColor = [UIColor clearColor];
-        lblTime.textAlignment = UITextAlignmentCenter;
+        lblTime.textAlignment = NSTextAlignmentCenter;
         [vTime addSubview:lblTime];
     }
     return self;

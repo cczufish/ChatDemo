@@ -16,7 +16,7 @@ typedef enum {
 }ABUserGroup;
 
 @class SWMessageCDSO;
-@class SWRequirementsCDSO;
+@class SWConversationCDSO;
 @interface SWUserCDSO : NSManagedObject
     
 @property (nonatomic) NSString *avatar,*nickname,*username,*school;
@@ -25,7 +25,7 @@ typedef enum {
 @property (nonatomic) NSNumber *ph_num,*pm_privacy,*province,*city,*quiet,*salary,*uid,*view_num,*wedlock;
 @property (nonatomic) NSDate *birthday,*lastvisit,*lastcontact;
 
-@property (nonatomic) SWRequirementsCDSO *requirements;
+@property (nonatomic) SWConversationCDSO *conversation;
 @property (nonatomic) NSArray *photolist;
 @property (nonatomic) NSDictionary *snsInfo;
 

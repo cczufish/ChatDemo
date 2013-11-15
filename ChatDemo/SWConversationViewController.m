@@ -12,17 +12,12 @@
 //#import "ABReportAbuseViewController.h"
 #import "SWUserCDSO.h"
 #import "SWMessageCDSO.h"
-//#import "ABWebViewController.h"
-//#import "ABBasicInfoViewController.h"
-//#import "ABRechargeViewController.h"
-//#import "ABMatchMakerViewController.h"
-//#import "ABVIPViewController.h"
-//#import "ABSNSViewController.h"
+#import "SWConversationCDSO.h"
 #import "SWConversationCell.h"
 
 @implementation SWConversationViewController
 @synthesize dicPeople,dicCurrentPM,strPM,bBeginEdit,delegate;
-@synthesize user;
+@synthesize conversation;
 
 - (void)dealloc{
     [XMPPWorker sharedWorker].chatUID = nil;
@@ -39,13 +34,9 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSLog(@"Current Funciton:%@",NSStringFromSelector(_cmd));
-    if (!user){
-        user = [SWUserCDSO userWithProfile:dicPeople];
-        [fetchedResultsController performFetch:nil];
-    }
+
     self.view.backgroundColor = [UIColor colorWithWhite:.95 alpha:1];
-    [XMPPWorker sharedWorker].chatUID = [NSString stringWithFormat:@"%d",user.uid.intValue];
+    [XMPPWorker sharedWorker].chatUID = conversation.name;
     
 //    [self addBGColor:[UIColor colorWithWhite:.95 alpha:1]];
 //    
@@ -61,70 +52,65 @@
     tvMessages.separatorStyle = UITableViewCellSeparatorStyleNone;
     
     [self scrollToBottomAnimated:NO];
-    if (user.group.intValue<3){
-        vInputField = [[UIView alloc] initWithFrame:CGRectMake(0, kViewControllerHeight-46, 320, 46)];
-        vInputField.backgroundColor = [UIColor colorWithWhite:.95 alpha:1];
-        [self.view addSubview:vInputField];
-        UIImageView *line = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
-        line.backgroundColor = [UIColor colorWithWhite:.72 alpha:1];
-
-        [vInputField addSubview:line];
-        
-
-        
-        btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnSend.frame = CGRectMake(320-48, 0, 48, vInputField.frame.size.height);
-        btnSend.titleLabel.font = [UIFont systemFontOfSize:15];
-        [btnSend setTitleColor:[UIColor colorWithWhite:.55 alpha:1] forState:UIControlStateNormal];
-        [btnSend setTitle:@"发送" forState:UIControlStateNormal];
-        [vInputField addSubview:btnSend];
-        [btnSend addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
-        
-        btnEmoticonsKeyboard = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnEmoticonsKeyboard.frame = CGRectMake(0, 0, 30, 30);
-        [btnEmoticonsKeyboard setImage:[UIImage imageNamed:@"ABPMEmoticons.png"] forState:UIControlStateNormal];
-        btnEmoticonsKeyboard.center = CGPointMake(19, 23);
-        [vInputField addSubview:btnEmoticonsKeyboard];
-        [btnEmoticonsKeyboard addTarget:self action:@selector(showEmoticonsKeyboard) forControlEvents:UIControlEventTouchUpInside];
-        
-        btnTipsList = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnTipsList.frame = CGRectMake(0, 0, 30, 30);
-        [btnTipsList setImage:[UIImage imageNamed:@"ABPMTips.png"] forState:UIControlStateNormal];
-        btnTipsList.center = CGPointMake(btnEmoticonsKeyboard.center.x+30, 23);
-        [vInputField addSubview:btnTipsList];
-//        [btnTipsList addTarget:self action:@selector(showPMTemplate) forControlEvents:UIControlEventTouchUpInside];
-        
-        tvContent = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(70, 7, 320-70-48, 30)];
-        tvContent.isScrollable = NO;
-        tvContent.minNumberOfLines = 1;
-        tvContent.maxNumberOfLines = 6;
-        [vInputField addSubview:tvContent];
-        tvContent.backgroundColor = [UIColor clearColor];
-        tvContent.font = [UIFont systemFontOfSize:14];
-        tvContent.delegate = self;
-        tvContent.layer.cornerRadius = 5;
-        tvContent.layer.borderWidth = 1;
-        tvContent.layer.borderColor = [UIColor colorWithWhite:.87 alpha:1].CGColor;
-        tvContent.layer.masksToBounds = YES;
-        tvContent.internalTextView.returnKeyType = UIReturnKeySend;
-        
-        btnInputField = [UIButton buttonWithType:UIButtonTypeCustom];
-        btnInputField.frame = tvContent.frame;
-        [vInputField addSubview:btnInputField];
-        btnInputField.hidden = YES;
-        [btnInputField addTarget:self action:@selector(growingTextViewClicked) forControlEvents:UIControlEventTouchUpInside];
-        
-        if (bBeginEdit)
-            [tvContent becomeFirstResponder];
-        
- 
-        
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustFrame:) name:UIKeyboardWillShowNotification object:nil];
-        [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideKeyboard) name:UIKeyboardWillHideNotification object:nil];
-    }else{
-        tvMessages.frame = CGRectMake(0, 0, 320, kViewControllerHeight-44);
-        self.navigationItem.rightBarButtonItems = nil;
-    }
+    vInputField = [[UIView alloc] initWithFrame:CGRectMake(0, kViewControllerHeight-46, 320, 46)];
+    vInputField.backgroundColor = [UIColor colorWithWhite:.95 alpha:1];
+    [self.view addSubview:vInputField];
+    UIImageView *line = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, 320, 1)];
+    line.backgroundColor = [UIColor colorWithWhite:.72 alpha:1];
+    
+    [vInputField addSubview:line];
+    
+    
+    
+    btnSend = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnSend.frame = CGRectMake(320-48, 0, 48, vInputField.frame.size.height);
+    btnSend.titleLabel.font = [UIFont systemFontOfSize:15];
+    [btnSend setTitleColor:[UIColor colorWithWhite:.55 alpha:1] forState:UIControlStateNormal];
+    [btnSend setTitle:@"发送" forState:UIControlStateNormal];
+    [vInputField addSubview:btnSend];
+    [btnSend addTarget:self action:@selector(send) forControlEvents:UIControlEventTouchUpInside];
+    
+    btnEmoticonsKeyboard = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnEmoticonsKeyboard.frame = CGRectMake(0, 0, 30, 30);
+    [btnEmoticonsKeyboard setImage:[UIImage imageNamed:@"ABPMEmoticons.png"] forState:UIControlStateNormal];
+    btnEmoticonsKeyboard.center = CGPointMake(19, 23);
+    [vInputField addSubview:btnEmoticonsKeyboard];
+    [btnEmoticonsKeyboard addTarget:self action:@selector(showEmoticonsKeyboard) forControlEvents:UIControlEventTouchUpInside];
+    
+    btnTipsList = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnTipsList.frame = CGRectMake(0, 0, 30, 30);
+    [btnTipsList setImage:[UIImage imageNamed:@"ABPMTips.png"] forState:UIControlStateNormal];
+    btnTipsList.center = CGPointMake(btnEmoticonsKeyboard.center.x+30, 23);
+    [vInputField addSubview:btnTipsList];
+    //        [btnTipsList addTarget:self action:@selector(showPMTemplate) forControlEvents:UIControlEventTouchUpInside];
+    
+    tvContent = [[HPGrowingTextView alloc] initWithFrame:CGRectMake(70, 7, 320-70-48, 30)];
+    tvContent.isScrollable = NO;
+    tvContent.minNumberOfLines = 1;
+    tvContent.maxNumberOfLines = 6;
+    [vInputField addSubview:tvContent];
+    tvContent.backgroundColor = [UIColor clearColor];
+    tvContent.font = [UIFont systemFontOfSize:14];
+    tvContent.delegate = self;
+    tvContent.layer.cornerRadius = 5;
+    tvContent.layer.borderWidth = 1;
+    tvContent.layer.borderColor = [UIColor colorWithWhite:.87 alpha:1].CGColor;
+    tvContent.layer.masksToBounds = YES;
+    tvContent.internalTextView.returnKeyType = UIReturnKeySend;
+    
+    btnInputField = [UIButton buttonWithType:UIButtonTypeCustom];
+    btnInputField.frame = tvContent.frame;
+    [vInputField addSubview:btnInputField];
+    btnInputField.hidden = YES;
+    [btnInputField addTarget:self action:@selector(growingTextViewClicked) forControlEvents:UIControlEventTouchUpInside];
+    
+    if (bBeginEdit)
+        [tvContent becomeFirstResponder];
+    
+    
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(adjustFrame:) name:UIKeyboardWillShowNotification object:nil];
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(hideKeyboard) name:UIKeyboardWillHideNotification object:nil];
     
     [tvMessages setContentOffset:CGPointMake(0, MAX(0, tvMessages.contentSize.height-tvMessages.frame.size.height))];
 }
@@ -235,13 +221,20 @@
 	msg.isOutbound  = YES;
     msg.messageStatus = ABMessageStatusSending;
 	msg.dateline   = [NSDate date];
-	msg.user = user;
     
-    if (!user.lastcontact || [msg.dateline timeIntervalSinceDate:user.lastcontact]>0)
-        user.lastcontact = msg.dateline;
+    SWUserCDSO *user = [SWDataProvider userofUsername:[SWDataProvider myUsername]];
+    if (!user){
+        user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
+        user.username = [SWDataProvider myUsername];
+    }
+    
+	msg.user = user;
+    msg.conversation = conversation;
+    
+    user.lastcontact = msg.dateline;
 
 	[[SWDataProvider managedObjectContext] save:nil];
-    [XMPPWorker sendMessage:msgContent toUser:user.username paid:user.pm_privacy.intValue>0];
+    [XMPPWorker sendMessage:msgContent toConversation:conversation];
     msg.messageStatus = ABMessageStatusSent;
    
     tvContent.text = @"";
@@ -401,7 +394,7 @@
 		
         //        NSPredicate *predicate = [NSPredicate predicateWithFormat:@""];
         NSSortDescriptor *sort = [[NSSortDescriptor alloc] initWithKey:@"dateline" ascending:YES];
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user==%@",user];
+		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"conversation==%@",conversation];
 
 		
 		fetchRequest = [[NSFetchRequest alloc] init];
@@ -467,15 +460,12 @@
 	NSLog(@"%@: controllerDidChangeContent", [self class]);
     
 	[tvMessages endUpdates];
-    if (user.pm_privacy.intValue==0){
-//        [self showPMTips];
-    }else
-        tvMessages.tableFooterView = nil;
+    tvMessages.tableFooterView = nil;
     
     if (tvMessages.contentOffset.y>=0.5f*tvMessages.frame.size.height)
         [self scrollToBottomAnimated:YES];
     
-    user.newnum = [NSNumber numberWithInt:0];
+    conversation.unread = [NSNumber numberWithInt:0];
     [[SWDataProvider managedObjectContext] save:nil];
 //    [self doneLoadingTableViewData];
 }

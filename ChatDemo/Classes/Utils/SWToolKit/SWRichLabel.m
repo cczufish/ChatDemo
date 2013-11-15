@@ -99,6 +99,9 @@ static NSDictionary *dicEmotionsMap = nil;
 }
 
 + (NSArray *)componentsOfContent:(NSString *)content{
+    if (!content)
+        return nil;
+    
     NSRegularExpression *regex = [[NSRegularExpression alloc] initWithPattern:@"\\[[^\\[\\]]+\\]"
                                                                       options:0
                                                                     error:nil];

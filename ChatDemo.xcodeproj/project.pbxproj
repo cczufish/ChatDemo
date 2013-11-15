@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F6131DF71836912C005D877B /* SWXMPP.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F6131DF61836912C005D877B /* SWXMPP.xcdatamodel */; };
+		F6AD906A1836632400CA6D0D /* SWConversationCDSO.m in Sources */ = {isa = PBXBuildFile; fileRef = F6AD90691836632400CA6D0D /* SWConversationCDSO.m */; };
 		F6C20D1018215E5100DDD300 /* SWConversationCell.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C20D0D18215E5100DDD300 /* SWConversationCell.m */; };
 		F6C20D1118215E5100DDD300 /* SWConversationViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C20D0F18215E5100DDD300 /* SWConversationViewController.m */; };
 		F6C20D1718215F4500DDD300 /* HPGrowingTextView.m in Sources */ = {isa = PBXBuildFile; fileRef = F6C20D1418215F4500DDD300 /* HPGrowingTextView.m */; };
@@ -145,7 +147,6 @@
 		F6D433BF1820FB5F00A04DC5 /* libxml2.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = F6D433BE1820FB5F00A04DC5 /* libxml2.dylib */; };
 		F6D433D61820FBC000A04DC5 /* SWMessageCDSO.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D433C91820FBC000A04DC5 /* SWMessageCDSO.m */; };
 		F6D433D81820FBC000A04DC5 /* SWUserCDSO.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D433CD1820FBC000A04DC5 /* SWUserCDSO.m */; };
-		F6D433D91820FBC000A04DC5 /* SWXMPP.xcdatamodel in Sources */ = {isa = PBXBuildFile; fileRef = F6D433CE1820FBC000A04DC5 /* SWXMPP.xcdatamodel */; };
 		F6D433DA1820FBC000A04DC5 /* ABParamInfo.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D433D11820FBC000A04DC5 /* ABParamInfo.m */; };
 		F6D433DD1820FCBF00A04DC5 /* NSData+Base64.m in Sources */ = {isa = PBXBuildFile; fileRef = F6D433DC1820FCBF00A04DC5 /* NSData+Base64.m */; };
 		F6D433E21820FD4D00A04DC5 /* SVProgressHUD.bundle in Resources */ = {isa = PBXBuildFile; fileRef = F6D433DF1820FD4D00A04DC5 /* SVProgressHUD.bundle */; };
@@ -176,6 +177,9 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F6131DF61836912C005D877B /* SWXMPP.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SWXMPP.xcdatamodel; sourceTree = "<group>"; };
+		F6AD90681836632400CA6D0D /* SWConversationCDSO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWConversationCDSO.h; sourceTree = "<group>"; };
+		F6AD90691836632400CA6D0D /* SWConversationCDSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWConversationCDSO.m; sourceTree = "<group>"; };
 		F6C20D0C18215E5100DDD300 /* SWConversationCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWConversationCell.h; sourceTree = "<group>"; };
 		F6C20D0D18215E5100DDD300 /* SWConversationCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWConversationCell.m; sourceTree = "<group>"; };
 		F6C20D0E18215E5100DDD300 /* SWConversationViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWConversationViewController.h; sourceTree = "<group>"; };
@@ -450,7 +454,6 @@
 		F6D433C91820FBC000A04DC5 /* SWMessageCDSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWMessageCDSO.m; sourceTree = "<group>"; };
 		F6D433CC1820FBC000A04DC5 /* SWUserCDSO.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SWUserCDSO.h; sourceTree = "<group>"; };
 		F6D433CD1820FBC000A04DC5 /* SWUserCDSO.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SWUserCDSO.m; sourceTree = "<group>"; };
-		F6D433CE1820FBC000A04DC5 /* SWXMPP.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = SWXMPP.xcdatamodel; sourceTree = "<group>"; };
 		F6D433D01820FBC000A04DC5 /* ABParamInfo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ABParamInfo.h; sourceTree = "<group>"; };
 		F6D433D11820FBC000A04DC5 /* ABParamInfo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = ABParamInfo.m; sourceTree = "<group>"; };
 		F6D433DB1820FCBF00A04DC5 /* NSData+Base64.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSData+Base64.h"; sourceTree = "<group>"; };
@@ -1316,7 +1319,9 @@
 				F6D433C91820FBC000A04DC5 /* SWMessageCDSO.m */,
 				F6D433CC1820FBC000A04DC5 /* SWUserCDSO.h */,
 				F6D433CD1820FBC000A04DC5 /* SWUserCDSO.m */,
-				F6D433CE1820FBC000A04DC5 /* SWXMPP.xcdatamodel */,
+				F6AD90681836632400CA6D0D /* SWConversationCDSO.h */,
+				F6AD90691836632400CA6D0D /* SWConversationCDSO.m */,
+				F6131DF61836912C005D877B /* SWXMPP.xcdatamodel */,
 			);
 			path = CoreData;
 			sourceTree = "<group>";
@@ -1496,7 +1501,6 @@
 				F6D433301820FA9C00A04DC5 /* XMPPMessage+XEP_0224.m in Sources */,
 				F6D4332B1820FA9C00A04DC5 /* XMPPPing.m in Sources */,
 				F6D433241820FA9C00A04DC5 /* XMPPMessageArchiving_Contact_CoreDataObject.m in Sources */,
-				F6D433D91820FBC000A04DC5 /* SWXMPP.xcdatamodel in Sources */,
 				F6D432FD1820FA9C00A04DC5 /* XMPPRoom.xcdatamodeld in Sources */,
 				F6C20D1718215F4500DDD300 /* HPGrowingTextView.m in Sources */,
 				F6D433E31820FD4D00A04DC5 /* SVProgressHUD.m in Sources */,
@@ -1580,6 +1584,7 @@
 				F6D432D91820FA9C00A04DC5 /* SWUIToolKit.m in Sources */,
 				F6D433321820FA9C00A04DC5 /* GCDMulticastDelegate.m in Sources */,
 				F6D433371820FA9C00A04DC5 /* GCDAsyncSocket.m in Sources */,
+				F6131DF71836912C005D877B /* SWXMPP.xcdatamodel in Sources */,
 				F6D433021820FA9C00A04DC5 /* XMPPRoomHybridStorage.m in Sources */,
 				F6D4333A1820FA9C00A04DC5 /* DDFileLogger.m in Sources */,
 				F6D433291820FA9C00A04DC5 /* XMPPMessage+XEP_0184.m in Sources */,
@@ -1592,6 +1597,7 @@
 				F6D433161820FA9C00A04DC5 /* XMPPvCardTempModule.m in Sources */,
 				F6D432DC1820FA9C00A04DC5 /* XMPPDeprecatedDigestAuthentication.m in Sources */,
 				F6D4332D1820FA9C00A04DC5 /* XMPPTime.m in Sources */,
+				F6AD906A1836632400CA6D0D /* SWConversationCDSO.m in Sources */,
 				F6D433131820FA9C00A04DC5 /* XMPPvCardTempBase.m in Sources */,
 				F6D432EA1820FA9C00A04DC5 /* XMPPPresence.m in Sources */,
 				F6D4333D1820FA9C00A04DC5 /* ContextFilterLogFormatter.m in Sources */,

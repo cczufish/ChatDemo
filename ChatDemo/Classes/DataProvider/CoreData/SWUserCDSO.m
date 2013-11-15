@@ -15,43 +15,54 @@
 @property (nonatomic) NSData *photos;
 @property (nonatomic) NSSet *messages;
 @property (nonatomic) NSData *sns;
+@property (nonatomic) NSSet *conversations;
 @end
 
 @implementation SWUserCDSO
 
-@dynamic avatar,nickname,uid,level,birthday,bloodtype,disturb,education,followees,followers,gender,group,height,house,lastvisit,ma_flag,nation,native_city,native_province,newnum,ph_num,pm_privacy,province,city,quiet,salary,username,view_num,wedlock,work,school;
+@dynamic avatar,nickname,uid,level,birthday,bloodtype,disturb,education,followees,followers,gender,group,height,house,lastvisit,ma_flag,nation,native_city,native_province,newnum,ph_num,pm_privacy,province,city,quiet,salary,username,view_num,wedlock,work,school,conversations;
 @dynamic lastcontact;
 
-@dynamic messages,photos,sns,requirements;
+@dynamic messages,photos,sns,conversation;
 
 @dynamic photolist;
 @dynamic snsInfo;
 
 - (NSArray *)allMessages{
-    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message"
-	                                          inManagedObjectContext:self.managedObjectContext];
-	
-    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user==%@", self];
-    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"dateline" ascending:YES];
+    NSMutableArray *ary = [NSMutableArray arrayWithArray:[self.messages allObjects]];
     
-    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
-	[fetchRequest setEntity:entity];
-	[fetchRequest setPredicate:predicate];
-    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
-	
-    NSError *error = nil;
+    [ary sortWithOptions:NSSortConcurrent usingComparator:^NSComparisonResult(id obj1, id obj2) {
+        SWMessageCDSO *msg1 = (SWMessageCDSO *)obj1;
+        SWMessageCDSO *msg2 = (SWMessageCDSO *)obj2;
+        
+        return [msg1.dateline compare:msg2.dateline];
+    }];
     
-	NSArray *ary = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
-	
-	
-	if (error)
-    {
-		NSLog(@"Error getting unread count: %@, %@", error, [error userInfo]);
-	}
-    
-    
-    
-	return ary;
+    return ary;
+//    NSEntityDescription *entity = [NSEntityDescription entityForName:@"Message"
+//	                                          inManagedObjectContext:self.managedObjectContext];
+//	
+//    NSPredicate *predicate = [NSPredicate predicateWithFormat:@"user==%@", self];
+//    NSSortDescriptor *sort = [NSSortDescriptor sortDescriptorWithKey:@"dateline" ascending:YES];
+//    
+//    NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
+//	[fetchRequest setEntity:entity];
+//	[fetchRequest setPredicate:predicate];
+//    [fetchRequest setSortDescriptors:[NSArray arrayWithObject:sort]];
+//	
+//    NSError *error = nil;
+//    
+//	NSArray *ary = [self.managedObjectContext executeFetchRequest:fetchRequest error:&error];
+//	
+//	
+//	if (error)
+//    {
+//		NSLog(@"Error getting unread count: %@, %@", error, [error userInfo]);
+//	}
+//    
+//    
+//    
+//	return ary;
 }
 
 

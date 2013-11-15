@@ -7,7 +7,7 @@
 @dynamic content;
 @dynamic status,outbound,dateline;
 @dynamic isOutbound,hasBeenRead,isSent;
-@dynamic user,relative;
+@dynamic user,conversation;
 @dynamic paidContent,fullContent;
 
 - (BOOL)isSent

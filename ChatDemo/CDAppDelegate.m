@@ -31,6 +31,8 @@
 }
 
 - (void)reloadAccount{
+    [XMPPWorker disconnect];
+    
     managedObjectContext = nil;
     managedObjectModel = nil;
     persistentStoreCoordinator = nil;

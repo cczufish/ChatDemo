@@ -9,6 +9,7 @@
 #import "SWMessagesViewController.h"
 #import "SWDataProvider.h"
 #import "SWConversationViewController.h"
+#import "SWConversationCDSO.h"
 
 @implementation SWMessagesViewController
 
@@ -29,14 +30,21 @@
     
     UIBarButtonItem *item = [[UIBarButtonItem alloc] initWithTitle:@"切换账号" style:UIBarButtonItemStyleDone target:self action:@selector(showAccountSelection)];
     self.navigationItem.rightBarButtonItem = item;
+    
+    item = [[UIBarButtonItem alloc] initWithTitle:@"群聊" style:UIBarButtonItemStyleDone target:self action:@selector(mucClicked)];
+    self.navigationItem.leftBarButtonItem = item;
  
     
     if (![SWDataProvider myInfo]){
-        [self showAccountSelection];
+        [self performSelector:@selector(showAccountSelection) withObject:nil afterDelay:.3f];
     }else{
         self.navigationItem.title = [SWDataProvider myUsername];
         [XMPPWorker checkAndConnect];
     }
+}
+
+- (void)mucClicked{
+    [XMPPWorker initialMUC];
 }
 
 - (void)showAccountSelection{
@@ -67,9 +75,9 @@
         cell.detailTextLabel.textColor = [UIColor blueColor];
     }
     
-    SWUserCDSO *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
-    cell.textLabel.text = user.username;
-    cell.detailTextLabel.text = user.lastMessage.content;
+    SWConversationCDSO *conversation = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    cell.textLabel.text = conversation.conversationType==SWConversationTypeInstant?conversation.name:conversation.subject;
+    cell.detailTextLabel.text = conversation.conversationType==SWConversationTypeInstant?conversation.lastMessage.content:[NSString stringWithFormat:@"%@:%@",conversation.lastMessage.user.username,conversation.lastMessage.content];
     
     return cell;
 }
@@ -87,9 +95,9 @@
 }
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath{
-    SWUserCDSO *user = [[self fetchedResultsController] objectAtIndexPath:indexPath];
+    SWConversationCDSO *conversation = [[self fetchedResultsController] objectAtIndexPath:indexPath];
     SWConversationViewController *vcPM = [[SWConversationViewController alloc] init];
-    vcPM.user = user;
+    vcPM.conversation = conversation;
     [self.navigationController pushViewController:vcPM animated:YES];
 }
 
@@ -102,18 +110,18 @@
 		NSArray *sortDescriptors;
 		NSFetchRequest *fetchRequest;
 		
-        NSEntityDescription *entity = [NSEntityDescription entityForName:@"User"
+        NSEntityDescription *entity = [NSEntityDescription entityForName:@"Conversation"
 		                                          inManagedObjectContext:[SWDataProvider managedObjectContext]];
 		
         //        NSPredicate *predicate = [NSPredicate predicateWithFormat:@""];
-        statusSD = [[NSSortDescriptor alloc] initWithKey:@"lastcontact" ascending:NO];
-		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username!=%@ && username!=nil &&lastcontact>%@",[SWDataProvider myUsername],[NSDate dateWithTimeIntervalSince1970:0]];
+        statusSD = [[NSSortDescriptor alloc] initWithKey:@"dateline" ascending:NO];
+//		NSPredicate *predicate = [NSPredicate predicateWithFormat:@"username!=%@ && username!=nil &&lastcontact>%@",[SWDataProvider myUsername],[NSDate dateWithTimeIntervalSince1970:0]];
 		sortDescriptors = [[NSArray alloc] initWithObjects:statusSD, nil];
 		
 		fetchRequest = [[NSFetchRequest alloc] init];
 		[fetchRequest setFetchBatchSize:20];
 		[fetchRequest setEntity:entity];
-        [fetchRequest setPredicate:predicate];
+//        [fetchRequest setPredicate:predicate];
 		[fetchRequest setSortDescriptors:sortDescriptors];
 		
 		fetchedResultsController = [[NSFetchedResultsController alloc] initWithFetchRequest:fetchRequest

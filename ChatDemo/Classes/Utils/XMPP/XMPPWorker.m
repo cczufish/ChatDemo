@@ -12,6 +12,8 @@
 #import "SWUserCDSO.h"
 #import "SWMessageCDSO.h"
 #import "XMPPWorkerPrivacy.h"
+#import "XMPPMUC.h"
+#import "SWConversationCDSO.h"
 
 static XMPPStream *xmppStream;
 static XMPPWorker *sharedWorker;
@@ -48,12 +50,31 @@ static XMPPAutoPing *xmppAutoPing;
 //    [iq addAttributeWithName:@"id" stringValue:@"getlist1"];
 //    [iq addChild:[NSXMLElement elementWithName:@"query" xmlns:@"jabber:iq:privacy"]];
 //    [xmppStream sendElement:iq];
-    [xmppPrivacy getBlackList];
+//    [xmppPrivacy getBlackList];
 //    XMPPIQ *iq = [XMPPIQ iqWithType:@"get" elementID:@"getlist2"];
 //    NSXMLElement *query = [NSXMLElement elementWithName:@"query" xmlns:@"jabber:iq:privacy"];
 //    [query addChild:[NSXMLElement elementWithName:@"list" children:nil attributes:[NSArray arrayWithObject:[NSXMLElement attributeWithName:@"name" stringValue:@"blacklist"]]]];
 //    
 //    [[XMPPWorker xmppStream] sendElement:iq];
+}
+
++ (void)sendMessage:(NSString *)msg toConversation:(SWConversationCDSO *)conversation{
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
+    [body setStringValue:msg];
+    
+    
+    NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+    [message addAttributeWithName:@"type" stringValue:@"chat"];
+    if (conversation.conversationType==SWConversationTypeInstant)
+        [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@%@",conversation.name,kChatServerDomain]];
+    else{
+        [message addAttributeWithName:@"to" stringValue:[NSString stringWithFormat:@"%@@broadcast.%@",conversation.name,kChatServerDomain]];
+        [body addAttributeWithName:@"room" stringValue:conversation.name];
+    }
+    
+    [message addChild:body];
+    
+    [xmppStream sendElement:message];
 }
 
 + (void)sendMessage:(NSString *)msg toUser:(NSString *)uid{
@@ -68,6 +89,8 @@ static XMPPAutoPing *xmppAutoPing;
     
     [xmppStream sendElement:message];
 }
+
+
 
 + (void)sendMessage:(NSString *)msg toUser:(NSString *)uid paid:(BOOL)paid{    
     NSXMLElement *body = [NSXMLElement elementWithName:@"body"];
@@ -240,6 +263,7 @@ static XMPPAutoPing *xmppAutoPing;
 - (void)xmppStreamDidAuthenticate:(XMPPStream *)sender{
     NSLog(@"Loginned");
     [self goOnline];
+    [XMPPWorker initialMessageCenter];
     [[MTStatusBarOverlay sharedInstance] postFinishMessage:@"登录成功" duration:1];
 }
 
@@ -249,12 +273,15 @@ static XMPPAutoPing *xmppAutoPing;
 }
 
 - (void)xmppStream:(XMPPStream *)sender didReceiveMessage:(XMPPMessage *)message{
+    NSString *from = [message attributeStringValueForName:@"from"];
+    if ([from hasPrefix:[NSString stringWithFormat:@"%@@%@",[SWDataProvider myUsername],kChatServerDomain]])
+        return;
     NSString *type = [message attributeStringValueForName:@"type"];
-//    NSLog(@"Message:%@",message);
+    NSLog(@"Message:%@",message);
     NSXMLElement *body = [message elementForName:@"body"];
-    BOOL paid = [body attributeBoolValueForName:@"paid"];
-    if ([type isEqualToString:@"chat"] && body){
-        NSString *from = [message attributeStringValueForName:@"from"];
+    NSString *room = [body attributeStringValueForName:@"room"];
+    
+    if ([type isEqualToString:@"chat"] && !room){
         NSString *uid = [[from componentsSeparatedByString:@"@"] objectAtIndex:0];
         
         NSDate *dateline = nil;
@@ -285,41 +312,113 @@ static XMPPAutoPing *xmppAutoPing;
             if (!user){
                 user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
                 user.username = uid;
+            }
+            SWConversationCDSO *conversation = [SWConversationCDSO conversationWithName:uid type:SWConversationTypeInstant];
+            if (!conversation){
+                conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:[SWDataProvider managedObjectContext]];
+                
+
+                
+                
+                conversation.conversationType = SWConversationTypeInstant;
+                conversation.name = uid;
+                
                 [[SWDataProvider managedObjectContext] save:nil];
             }
-            if (user){
+            [conversation addOccupant:user];
+            
+            if (conversation){
                 if (!chatUID || ![chatUID isEqualToString:uid])
-                    user.newnum = [NSNumber numberWithInt:user.newnum.intValue+1];
+                    conversation.unread = [NSNumber numberWithInt:user.newnum.intValue+1];
                 else
-                    user.newnum = [NSNumber numberWithInt:0];
-                if (paid)
-                    user.pm_privacy = [NSNumber numberWithInt:1];
+                    conversation.unread = [NSNumber numberWithInt:0];
                 
                 SWMessageCDSO *msg = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:[SWDataProvider managedObjectContext]];
                 
                 msg.content = content;
                 msg.dateline = dateline;
                 msg.user = user;
+                msg.conversation = conversation;
+                
+                conversation.dateline = dateline;
+                
+                msg.outbound = [NSNumber numberWithBool:NO];
+                
+                if (!user.lastcontact || [msg.dateline timeIntervalSinceDate:user.lastcontact]>0)
+                    user.lastcontact = msg.dateline;
+                                
+                [[SWDataProvider managedObjectContext] save:nil];
+//                [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshPrompts object:nil];
+            }else{
+                [NSThread detachNewThreadSelector:@selector(loadProfileForMessage:) toTarget:self withObject:message];
+            }
+        });
+    }
+    else if ([type isEqualToString:@"chat"] && room){
+        NSString *uid = [[from componentsSeparatedByString:@"@"] objectAtIndex:0];
+        
+        NSDate *dateline = nil;
+        NSArray *children = [message children];
+        for (NSXMLElement *child in children){
+            if ([child.name isEqualToString:@"delay"]){
+                NSString *stamp = [child attributeStringValueForName:@"stamp"];
+                if (stamp){
+                    NSDateFormatter *formatter = [[NSDateFormatter alloc] init];
+                    [formatter setDateFormat:@"yyyy-MM-dd'T'hh:mm:ss.SSS'Z'"];
+                    dateline = [formatter dateFromString:stamp];
+                    NSInteger currentGMTOffset = [[NSTimeZone localTimeZone] secondsFromGMT];
+                    dateline = [dateline dateByAddingTimeInterval:currentGMTOffset];
+                }
+                
+            }
+        }
+        
+        
+        if (!dateline)
+            dateline = [NSDate date];
+        
+        
+        NSString *content = [[message elementForName:@"body"] stringValue];
+        
+        sw_dispatch_sync_on_main_thread(^{
+            SWUserCDSO *user = [SWDataProvider userofUsername:uid];
+            if (!user){
+                user = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
+                user.username = uid;
+            }
+            SWConversationCDSO *conversation = [SWConversationCDSO conversationWithName:room type:SWConversationTypeGroup];
+            if (!conversation){
+                conversation = [NSEntityDescription insertNewObjectForEntityForName:@"Conversation" inManagedObjectContext:[SWDataProvider managedObjectContext]];
+                conversation.conversationType = SWConversationTypeGroup;
+                conversation.name = room;
+                conversation.subject = room;
+            }
+            
+            [conversation addOccupant:user];
+            [[SWDataProvider managedObjectContext] save:nil];
+            
+            if (conversation){
+                if (!chatUID || ![chatUID isEqualToString:uid])
+                    conversation.unread = [NSNumber numberWithInt:user.newnum.intValue+1];
+                else
+                    conversation.unread = [NSNumber numberWithInt:0];
+                
+                SWMessageCDSO *msg = [NSEntityDescription insertNewObjectForEntityForName:@"Message" inManagedObjectContext:[SWDataProvider managedObjectContext]];
+                
+                msg.content = content;
+                msg.dateline = dateline;
+                msg.user = user;
+                msg.conversation = conversation;
+                
+                conversation.dateline = dateline;
+                
                 msg.outbound = [NSNumber numberWithBool:NO];
                 
                 if (!user.lastcontact || [msg.dateline timeIntervalSinceDate:user.lastcontact]>0)
                     user.lastcontact = msg.dateline;
                 
-                NSXMLElement *body = [message elementForName:@"body"];
-                if ([body attributeStringValueForName:@"uid"]){
-                    NSString *relativeUID = [body attributeStringValueForName:@"uid"];
-                    NSString *relativeNickname = [body attributeStringValueForName:@"nickname"];
-                    SWUserCDSO *relative = [SWDataProvider userofUsername:relativeUID];
-                    if (!relative){
-                        relative = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
-                        relative.uid = [NSNumber numberWithInt:[relativeUID intValue]];
-                        relative.nickname = relativeNickname;
-                    }
-                    msg.relative = relative;
-                }
-                
                 [[SWDataProvider managedObjectContext] save:nil];
-//                [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshPrompts object:nil];
+                //                [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshPrompts object:nil];
             }else{
                 [NSThread detachNewThreadSelector:@selector(loadProfileForMessage:) toTarget:self withObject:message];
             }
@@ -337,6 +436,7 @@ static XMPPAutoPing *xmppAutoPing;
 }
 
 - (BOOL)xmppStream:(XMPPStream *)sender didReceiveIQ:(XMPPIQ *)iq{
+    NSLog(@"IQ:%@",iq);
     return YES;
 }
 
@@ -385,18 +485,7 @@ static XMPPAutoPing *xmppAutoPing;
                 if (!user.lastcontact || [msg.dateline timeIntervalSinceDate:user.lastcontact]>0)
                     user.lastcontact = msg.dateline;
                 
-                NSXMLElement *body = [message elementForName:@"body"];
-                if ([body attributeStringValueForName:@"uid"]){
-                    NSString *relativeUID = [body attributeStringValueForName:@"uid"];
-                    NSString *relativeNickname = [body attributeStringValueForName:@"nickname"];
-                    SWUserCDSO *relative = [SWDataProvider userofUsername:relativeUID];
-                    if (!relative){
-                        relative = [NSEntityDescription insertNewObjectForEntityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]];
-                        relative.uid = [NSNumber numberWithInt:[relativeUID intValue]];
-                        relative.nickname = relativeNickname;
-                    }
-                    msg.relative = relative;
-                }
+
                 
                 [[SWDataProvider managedObjectContext] save:nil];
 //                [[NSNotificationCenter defaultCenter] postNotificationName:kRefreshPrompts object:nil];
@@ -408,35 +497,32 @@ static XMPPAutoPing *xmppAutoPing;
 
 #pragma mark - Other Actions
 + (void)initialMessageCenter{
+    
+    
+    
     NSFetchRequest *fetchRequest = [[NSFetchRequest alloc] init];
     [fetchRequest setEntity:[NSEntityDescription entityForName:@"User" inManagedObjectContext:[SWDataProvider managedObjectContext]]];
     [fetchRequest setPredicate:[NSPredicate predicateWithFormat:@"username!=%@ && lastcontact>%@",[SWDataProvider myUsername],[NSDate dateWithTimeIntervalSince1970:0]]];
     [fetchRequest setIncludesPropertyValues:NO]; //only fetch the managedObjectID
     
     NSArray *users = [[SWDataProvider managedObjectContext] executeFetchRequest:fetchRequest error:nil];
-    BOOL bMessagesInserted = [[NSUserDefaults standardUserDefaults] boolForKey:@"MessagesInserted"];
-    if (0==users.count && !bMessagesInserted){
-        NSArray *messages = [NSArray arrayWithContentsOfFile:[@"messages.plist" bundlePath]];
-        
-        for (NSDictionary *msg in messages){
-            NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
-            
-            NSXMLElement *body = [NSXMLElement elementWithName:@"body" stringValue:[msg objectForKey:@"content"]];
-            [message addChild:body];
-            
-            [message addAttributeWithName:@"type" stringValue:@"chat"];
-            [message addAttributeWithName:@"from" stringValue:[NSString stringWithFormat:@"%@@%@",[msg objectForKey:@"uid"],kChatServerDomain]];
-            
-            [[XMPPWorker sharedWorker] xmppStream:nil didReceiveMessage:(XMPPMessage *)message];
+//    BOOL bMessagesInserted = [[NSUserDefaults standardUserDefaults] boolForKey:@"MessagesInserted"];
+    if (0==users.count){
+        for (int i=0;i<3;i++){
+            NSString *username = [NSString stringWithFormat:@"demo%d",i];
+            if (![username isEqualToString:[SWDataProvider myUsername]])
+                [XMPPWorker sendFakeMessage:@"hello" fromUser:username];
         }
-        
-        [[NSUserDefaults standardUserDefaults] setBool:YES forKey:@"MessagesInserted"];
     }
 }
 
 #pragma mark - XMPPAutoReconnect Delegate
 - (void)xmppReconnect:(XMPPReconnect *)sender didDetectAccidentalDisconnect:(SCNetworkReachabilityFlags)connectionFlags{
     NSLog(@"XMPP Detected Disconnect");
+    sw_dispatch_sync_on_main_thread(^{
+        [XMPPWorker connect];
+    });
+    
 }
 
 - (BOOL)xmppReconnect:(XMPPReconnect *)sender shouldAttemptAutoReconnect:(SCNetworkReachabilityFlags)reachabilityFlags{
@@ -449,6 +535,94 @@ static XMPPAutoPing *xmppAutoPing;
         NSLog(@"XMPP Timeout");
         [XMPPWorker connect];
     });
+}
+
+#pragma mark - Room
++ (void)initialMUC{
+    XMPPJID *jid = [XMPPJID jidWithString:@"DemoGroupChat@broadcast.xmppserver"];
+    
+    NSXMLElement *message = [NSXMLElement elementWithName:@"message"];
+    [message addAttributeWithName:@"type" stringValue:@"chat"];
+
+    
+    NSXMLElement *body = [NSXMLElement elementWithName:@"body" stringValue:@"Group Chat Message"];
+    [body addAttributeWithName:@"subject" stringValue:@"Demo Only"];
+    [body addAttributeWithName:@"room" stringValue:@"DemoGroupChat"];
+    
+    
+    [message addChild:body];
+    [message addAttributeWithName:@"to" stringValue:[jid full]];
+    
+    [xmppStream sendElement:message];
+    
+    
+    
+    // Explicit configuration using given form.
+    //
+    // <iq type='set'
+    //       id='create2'
+    //       to='coven@chat.shakespeare.lit'>
+    //   <query xmlns='http://jabber.org/protocol/muc#owner'>
+    //     <x xmlns='jabber:x:data' type='submit'>
+    //       <field var='FORM_TYPE'>
+    //         <value>http://jabber.org/protocol/muc#roomconfig</value>
+    //       </field>
+    //       <field var='muc#roomconfig_roomname'>
+    //         <value>A Dark Cave</value>
+    //       </field>
+    //       <field var='muc#roomconfig_enablelogging'>
+    //         <value>0</value>
+    //       </field>
+    //       ...
+    //     </x>
+    //   </query>
+    // </iq>
+    
+//    NSXMLElement *x = [NSXMLElement elementWithName:@"x" xmlns:@"jabber:x:data"];
+//    [x addAttributeWithName:@"type" stringValue:@"submit"];
+//    
+//    NSXMLElement *field = [NSXMLElement elementWithName:@"field" children:@[[NSXMLElement elementWithName:@"value" stringValue:@"1"]] attributes:@[[NSXMLNode attributeWithName:@"var" stringValue:@"muc#roomconfig_allowinvites"]]];
+//    [x addChild:field];
+//    
+//    field = [NSXMLElement elementWithName:@"field" children:@[[NSXMLElement elementWithName:@"value" stringValue:@"none"]] attributes:@[[NSXMLNode attributeWithName:@"var" stringValue:@"muc#roomconfig_maxusers"]]];
+//    [x addChild:field];
+//    
+//    field = [NSXMLElement elementWithName:@"field" children:@[[NSXMLElement elementWithName:@"value" stringValue:@"1"]] attributes:@[[NSXMLNode attributeWithName:@"var" stringValue:@"muc#roomconfig_persistentroom"]]];
+//    [x addChild:field];
+//    
+//    field = [NSXMLElement elementWithName:@"field" children:@[[NSXMLElement elementWithName:@"value" stringValue:@"http://jabber.org/protocol/muc#roomconfig"]] attributes:@[[NSXMLNode attributeWithName:@"var" stringValue:@"FORM_TYPE"]]];
+//    [x addChild:field];
+//    
+//    NSString *roomName = @"demo3";
+//    NSString *jidRoom = [NSString stringWithFormat:@"%@@conference.xmppserver", roomName];
+//    XMPPJID *jid = [XMPPJID jidWithString:jidRoom];
+//    
+//    XMPPRoomCoreDataStorage *roomstorage = [[XMPPRoomCoreDataStorage alloc] init];
+//    XMPPRoom *room = [[XMPPRoom alloc] initWithRoomStorage:roomstorage jid:jid dispatchQueue:dispatch_get_main_queue()];
+//    
+//    XMPPStream *stream = [self xmppStream];
+//    [room activate:stream];
+//    
+//    
+//    [room joinRoomUsingNickname:[SWDataProvider myUsername] history:nil];
+//    [room configureRoomUsingOptions:nil];
+//    
+//    [room addDelegate:self delegateQueue:dispatch_get_main_queue()];
+//    
+//    [room inviteUser:[XMPPJID jidWithString:@"demo1@xmppserver"] withMessage:@"加入吧"];
+}
+
+- (void)xmppRoomDidCreate:(XMPPRoom *)sender{
+    [sender configureRoomUsingOptions:nil];
+    NSLog(@"Did Create:%@",sender.roomJID.full);
+}
+
+- (void)xmppRoom:(XMPPRoom *)sender didReceiveMessage:(XMPPMessage *)message fromOccupant:(XMPPJID *)occupantJID{
+    NSLog(@"Room Message:%@",message);
+}
+
+- (void)xmppRoomDidJoin:(XMPPRoom *)sender{
+    NSLog(@"Did Join:%@",sender.roomJID.full);
 }
 
 @end

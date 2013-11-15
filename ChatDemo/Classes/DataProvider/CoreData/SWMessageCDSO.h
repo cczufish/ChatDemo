@@ -1,6 +1,7 @@
 #import <CoreData/CoreData.h>
 
 @class SWUserCDSO;
+@class SWConversationCDSO;
 
 typedef enum{
     ABMessageStatusSending,
@@ -19,7 +20,8 @@ typedef enum{
 @property (nonatomic,readonly) NSString *paidContent,*fullContent;
 // Relationships
 
-@property (nonatomic) SWUserCDSO *user,*relative;
+@property (nonatomic) SWUserCDSO *user;
+@property (nonatomic) SWConversationCDSO *conversation;
 
 // Convenience Properties
 

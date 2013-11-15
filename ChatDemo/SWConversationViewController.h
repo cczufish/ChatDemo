@@ -9,7 +9,6 @@
 #import <UIKit/UIKit.h>
 //#import "ABPMCell.h"
 #import "HPGrowingTextView.h"
-#import "SWMessageCDSO.h"
 #import <CoreData/CoreData.h>
 #import "XMPPFramework.h"
 //#import "ABPMTemplateView.h"
@@ -22,6 +21,7 @@ typedef enum {
     ABPMTipsTypeMatchMaker
 }ABPMTipsType;
 @class SWUserCDSO;
+@class SWConversationCDSO;
 
 @protocol ABPMDelegate
 
@@ -54,6 +54,6 @@ typedef enum {
 @property BOOL bBeginEdit;
 @property (nonatomic,weak) id<ABPMDelegate> delegate;
 
-@property (nonatomic) SWUserCDSO *user;
+@property (nonatomic) SWConversationCDSO *conversation;
 
 @end
